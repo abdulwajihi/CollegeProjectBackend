@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.preferences p LEFT JOIN FETCH p.preferenceType WHERE u.email = :identifier OR u.username = :identifier")
     Optional<User> findByEmailOrUsernameWithPreferences(@Param("identifier") String identifier);
 
+
 }
