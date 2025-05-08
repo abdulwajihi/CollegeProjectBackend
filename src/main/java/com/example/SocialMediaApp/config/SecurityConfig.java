@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/swagger-ui.html",
                                 "/webjars/**",
-                                "/api/preferences"
+                                "/api/preferences/**",
+                                "/public/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/auth/update-password",

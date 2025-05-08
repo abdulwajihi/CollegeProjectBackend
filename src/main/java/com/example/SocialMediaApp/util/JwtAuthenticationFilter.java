@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userRepository.findByEmail(email).orElse(null);
+            User user = userRepository.findByEmailOrUsernameWithPreferences(email).orElse(null);
 
             if (blacklistedTokenRepository.existsByToken(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

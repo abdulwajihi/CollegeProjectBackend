@@ -38,7 +38,7 @@ public class User {
     @Column(length = 255)
     private String preferenceNames;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<UserPreference> preferences = new ArrayList<>();
 
 

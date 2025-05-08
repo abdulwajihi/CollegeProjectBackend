@@ -31,6 +31,7 @@ public class AuthController {
                 request.getFirstName(),
                 request.getLastName(),
                 request.getGender(),
+                request.getPhoneNumber(),
                 request.getPreferences());
         return ResponseEntity.ok("Sign-up successful. Please check your email for OTP.");
     }
@@ -43,18 +44,18 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<String> signIn(
+    public ResponseEntity<SigninResponse> signIn(
             @RequestBody SigninRequest request) {
-        userService.signIn(request.getUsername(), request.getPassword());
-        return ResponseEntity.ok("OTP sent to your email.");
+     SigninResponse response= userService.signIn(request.getUsername(), request.getPassword());
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/verify-signin")
-    public ResponseEntity<String> verifySignIn(
-            @RequestBody VerifySigninRequest request) {
-        String token = userService.verifySignIn(request.getEmail(), request.getOtp());
-        return ResponseEntity.ok("JWT Token: " + token);
-    }
+//    @PostMapping("/verify-signin")
+//    public ResponseEntity<String> verifySignIn(
+//            @RequestBody VerifySigninRequest request) {
+//        String token = userService.verifySignIn(request.getEmail(), request.getOtp());
+//        return ResponseEntity.ok("JWT Token: " + token);
+//    }
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(

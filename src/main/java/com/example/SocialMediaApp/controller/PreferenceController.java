@@ -24,9 +24,11 @@ public class PreferenceController {
     @Autowired
     private PreferenceRepository userPreferenceRepository;
 
-    @GetMapping("/all")
-    public List<UserPreferenceProjection> getAllUserPreferences() {
-        return userPreferenceRepository.getUserPreferencesWithNames();
+    @GetMapping("/user/{userId}")
+    public List<UserPreferenceProjection> getPreferencesByUserId(@PathVariable Long userId) {
+        return userPreferenceRepository.getUserPreferencesWithNamesByUserId(userId);
     }
+
+
 }
 

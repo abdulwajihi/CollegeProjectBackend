@@ -6,3 +6,4 @@ public interface UserPreferenceProjection {
     Long getPreferenceTypeId();
     String getPreferenceName();
 }
+

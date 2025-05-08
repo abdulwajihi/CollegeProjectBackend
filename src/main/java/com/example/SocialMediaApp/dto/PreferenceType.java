@@ -6,16 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "preference_types")
+@Table(name = "preference_type")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PreferenceType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long preferenceTypeId;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true,name = "name")
     private String name;
 
 
