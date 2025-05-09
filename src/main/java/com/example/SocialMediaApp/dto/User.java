@@ -35,11 +35,28 @@ public class User {
     private String phoneNumber;
     private boolean verified; // Initial signup verification
     private int tokenVersion;
+    @Version
+    private Long version; // Added for optimistic locking
     @Column(length = 255)
     private String preferenceNames;
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<UserPreference> preferences = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "follower")
+//    @JsonIgnore
+//    private List<Integer> following;
+//
+//    @OneToMany(mappedBy = "following")
+//    @JsonIgnore
+//    private List<Integer> followers;
+@JsonIgnore
+@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<Follow> following = new ArrayList<>(); // Fixed to List<Follow>
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Follow> followers = new ArrayList<>(); // Fixed to List<Follow>
 
 
 }
