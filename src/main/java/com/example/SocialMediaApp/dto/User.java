@@ -58,5 +58,7 @@ private List<Follow> following = new ArrayList<>(); // Fixed to List<Follow>
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Follow> followers = new ArrayList<>(); // Fixed to List<Follow>
 
+    private String bio;
+    private String profilePictureUrl;//Added for cloudinary field
 
 }
