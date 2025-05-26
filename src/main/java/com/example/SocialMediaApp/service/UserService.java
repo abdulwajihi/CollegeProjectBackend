@@ -46,7 +46,7 @@ public class UserService {
 
 
 
-    public User signUp(String username, String email, String password, String firstName, String lastName, String gender, String phoneNumber, List<String> preferences) {
+    public User signUp(String username, String email, String password, String firstName, String lastName, List<String> preferences) {
         if (!PasswordValidator.isValid(password)) {
             throw new IllegalArgumentException("Password must be at least 8 characters long, contain an uppercase letter and a special character.");
         }
@@ -56,9 +56,6 @@ public class UserService {
         if (preferences.size() > 5) {
             throw new RuntimeException("You can select up to 5 preferences only.");
         }
-        if (!phoneNumber.matches("[0-9]{10}")) {
-            throw new RuntimeException("Invalid phone number");
-        }
 
 
         User user = new User();
@@ -67,8 +64,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setGender(gender);
-        user.setPhoneNumber(phoneNumber);
         user.setVerified(false);
         user.setTokenVersion(0);
 //        user = userRepository.save(user);
@@ -81,6 +76,8 @@ public class UserService {
             UserPreference pref = new UserPreference();
             pref.setPreferenceType(type);
             pref.setUser(user); // link to user
+
+            pref.setPreferenceName(prefType);
 
             user.getPreferences().add(pref); // add to list (will be saved due to cascade)
 

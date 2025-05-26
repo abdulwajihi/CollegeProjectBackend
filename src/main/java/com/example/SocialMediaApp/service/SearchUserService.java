@@ -34,9 +34,7 @@ public class SearchUserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getFirstName(),
-                user.getLastName(),
-                user.getGender(),
-                user.getPhoneNumber()
+                user.getLastName()
         );
     }
 

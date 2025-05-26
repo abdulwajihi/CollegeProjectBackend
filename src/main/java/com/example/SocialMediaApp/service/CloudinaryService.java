@@ -28,4 +28,10 @@ public class CloudinaryService {
             throw new IOException("Failed to upload profile picture to Cloudinary", e);
         }
     }
-}
+
+
+        public String uploadFile(MultipartFile file) throws IOException {
+            Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            return result.get("secure_url").toString();
+        }
+    }

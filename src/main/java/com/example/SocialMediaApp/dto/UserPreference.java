@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+@Entity//Entity User Preference
 @Table(name = "user_preference")
 @Data
 public class UserPreference {
@@ -22,6 +22,9 @@ public class UserPreference {
     @JoinColumn(name = "preference_type_id")
     private PreferenceType preferenceType;
 
-    @Column(name = "preference_value")
-    private String preferenceValue; // Added to store the value of the preference
+
+    private String preferenceName;
+
+//    @Column(name = "preference_value")
+//    private String preferenceValue; // Added to store the value of the preference
 }

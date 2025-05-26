@@ -53,7 +53,12 @@ public class SecurityConfig {
                                 "/api/auth/logout",
                                 "/api/auth/logout-all",
                                 "/api/profile/update-profile",
-                                "/api/profile/get-profile"
+                                "/api/profile/get-profile",
+                                "/api/images/upload",
+                                "/api/likes/**",
+                                "/api/follow/**",
+                                "/api/user/**",
+                                "/api/users/**"
                         ).authenticated()
                         .anyRequest().authenticated()
                 )

@@ -30,8 +30,6 @@ public class AuthController {
                 request.getPassword(),
                 request.getFirstName(),
                 request.getLastName(),
-                request.getGender(),
-                request.getPhoneNumber(),
                 request.getPreferences());
         return ResponseEntity.ok("Sign-up successful. Please check your email for OTP.");
     }
@@ -111,11 +109,11 @@ public class AuthController {
         return ResponseEntity.ok("Sign-up OTP resent.");
     }
 
-    @PostMapping("/resend-signin-otp")
-    public ResponseEntity<String> resendSigninOtp(@RequestBody ResendPasswordRequest request) {
-        userService.resendOtp(request.getEmail(), "SIGNIN");
-        return ResponseEntity.ok("Sign-in OTP resent.");
-    }
+//    @PostMapping("/resend-signin-otp")
+//    public ResponseEntity<String> resendSigninOtp(@RequestBody ResendPasswordRequest request) {
+//        userService.resendOtp(request.getEmail(), "SIGNIN");
+//        return ResponseEntity.ok("Sign-in OTP resent.");
+//    }
 
     @PostMapping("/resend-reset-password-otp")
     public ResponseEntity<String> resendResetPasswordOtp(@RequestBody ResendPasswordRequest request) {

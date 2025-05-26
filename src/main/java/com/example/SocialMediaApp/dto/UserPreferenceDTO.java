@@ -10,5 +10,5 @@ import lombok.AllArgsConstructor;
 public class UserPreferenceDTO {
     private Long id;
     private Long preferenceTypeId;
-    private String preferenceTypeName;
+    private String preferenceName;
 }

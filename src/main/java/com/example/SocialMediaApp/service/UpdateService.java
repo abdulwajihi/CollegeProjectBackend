@@ -53,9 +53,7 @@ public class UpdateService {
         if (profileDTO.getLastName() != null) {
             user.setLastName(profileDTO.getLastName());
         }
-        if (profileDTO.getGender() != null) {
-            user.setGender(profileDTO.getGender());
-        }
+
         if (profileDTO.getBio() != null) {
             user.setBio(profileDTO.getBio());
         }
@@ -98,7 +96,6 @@ public class UpdateService {
         dto.setUsername(user.getUsername());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-        dto.setGender(user.getGender());
         dto.setBio(user.getBio());
         dto.setProfilePictureUrl(user.getProfilePictureUrl());
 
@@ -106,7 +103,7 @@ public class UpdateService {
             UserPreferenceDTO prefDTO = new UserPreferenceDTO();
             prefDTO.setId(pref.getId());
             prefDTO.setPreferenceTypeId(pref.getPreferenceType().getId());
-            prefDTO.setPreferenceTypeName(pref.getPreferenceType().getName());
+            prefDTO.setPreferenceName(pref.getPreferenceType().getName());
             return prefDTO;
         }).collect(Collectors.toList());
         dto.setPreferences(preferenceDTOs);
