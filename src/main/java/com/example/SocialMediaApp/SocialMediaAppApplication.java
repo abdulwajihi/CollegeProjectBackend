@@ -7,9 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.List;
-
+@EnableScheduling
 @SpringBootApplication
 public class SocialMediaAppApplication {
 
@@ -19,7 +20,7 @@ public class SocialMediaAppApplication {
 	@Bean
 	CommandLineRunner loadPreferences(PreferenceTypeRepository repo) {
 		return args -> {
-			List<String> defaultPrefs = List.of("Nature", "Animals", "Technology", "Art", "Travel", "Food");
+			List<String> defaultPrefs = List.of("Nature", "Animals", "Technology", "Art", "Travel", "Food","Cars","Bikes");
 			for (String name : defaultPrefs) {
 				if (repo.findByName(name).isEmpty()) {
 					repo.save(new PreferenceType(null, name));

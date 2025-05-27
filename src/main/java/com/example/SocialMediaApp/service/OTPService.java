@@ -70,4 +70,9 @@ public class OTPService {
       int code = 100000+ random.nextInt(900000);
        return String.valueOf(code);
   }
+    public boolean isOtpExpired(User user, String purpose) {
+        Otp otp = (Otp) otpRepository.findByUserAndPurpose(user, purpose);
+        return otp.getExpirationTime().isBefore(LocalDateTime.now());
+    }
+
 }

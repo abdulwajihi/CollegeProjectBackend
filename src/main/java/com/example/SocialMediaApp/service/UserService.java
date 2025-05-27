@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class UserService {
 
 
 
-
+    @Transactional
     public User signUp(String username, String email, String password, String firstName, String lastName, List<String> preferences) {
         if (!PasswordValidator.isValid(password)) {
             throw new IllegalArgumentException("Password must be at least 8 characters long, contain an uppercase letter and a special character.");
@@ -104,6 +105,11 @@ public class UserService {
         if (valid) {
             user.setVerified(true);
             userRepository.save(user);
+        }else{
+            //If otp invalid or expired
+            if(otpService.isOtpExpired(user,"Signup")){
+                userRepository.delete(user);
+            }
         }
         return valid;
     }

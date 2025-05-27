@@ -13,11 +13,12 @@ public class Otp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user-id",referencedColumnName = "id")
+    @JoinColumn(name = "user-id",referencedColumnName = "id",nullable = false)
     private User user;
     private String otpCode;
     private String purpose; //SIGNIN,SIGNUP,RESET PASSWORD
     private LocalDateTime expirationTime;
     @CreationTimestamp
     private LocalDateTime createdAt;
+//    private LocalDateTime expiresAt;
 }
