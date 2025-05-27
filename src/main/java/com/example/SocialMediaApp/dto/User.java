@@ -27,12 +27,10 @@ public class User {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    private String gender;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    private String phoneNumber;
     private boolean verified; // Initial signup verification
     private int tokenVersion;
     @Version

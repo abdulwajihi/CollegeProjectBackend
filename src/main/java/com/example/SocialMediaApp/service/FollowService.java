@@ -81,7 +81,6 @@ public class FollowService {
         dto.setUsername(user.getUsername());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-        dto.setGender(user.getGender());
         return dto;
     }
 }

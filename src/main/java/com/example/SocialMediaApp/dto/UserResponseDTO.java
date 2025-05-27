@@ -8,5 +8,4 @@ public class UserResponseDTO {//Follower and Following Dto
     private String username;
     private String firstName;
     private String lastName;
-    private String gender;
 }
