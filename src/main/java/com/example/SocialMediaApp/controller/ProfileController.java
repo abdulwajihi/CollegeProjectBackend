@@ -1,5 +1,6 @@
 package com.example.SocialMediaApp.controller;
 
+import com.example.SocialMediaApp.dto.ImageResponseDto;
 import com.example.SocialMediaApp.dto.UserProfileDTO;
 import com.example.SocialMediaApp.service.UpdateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")

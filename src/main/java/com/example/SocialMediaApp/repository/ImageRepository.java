@@ -21,6 +21,15 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     @Query("SELECT i FROM Image i WHERE i.tag IN :tags ORDER BY SIZE(i.likes) DESC")
     List<Image> findByTagInOrderByLikesDesc(@Param("tags") List<String> tags);
 
+    // ✅ Get all images posted by a specific user
+    @Query("SELECT i FROM Image i LEFT JOIN FETCH i.likes LEFT JOIN FETCH i.user WHERE i.user.username = :username")
+    List<Image> findAllImagesByUsernameWithLikes(@Param("username") String username);
+
+
     // Optional: find images by a user and tag (if still needed)
     List<Image> findByTagAndUserId(String tag, Long userId);
+    long countByUserId(Long userId);
+    List<Image> findByUserId(Long userId);
+
+
 }

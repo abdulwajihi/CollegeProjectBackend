@@ -27,6 +27,11 @@ public class FollowService {
     @Transactional
     public void followUser(String followerUsername, String followingUsername) {
         logger.info("Attempting to follow: {} -> {}", followerUsername, followingUsername);
+
+        if (followerUsername.equals(followingUsername)) {
+            logger.warn("User {} attempted to follow themselves", followerUsername);
+            throw new IllegalArgumentException("You cannot follow yourself.");
+        }
         User follower = userRepository.findByUsername(followerUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Follower not found: " + followerUsername));
         User following = userRepository.findByUsername(followingUsername)
@@ -81,6 +86,7 @@ public class FollowService {
         dto.setUsername(user.getUsername());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
+        dto.setProfilePictureUrl(user.getProfilePictureUrl());
         return dto;
     }
 }

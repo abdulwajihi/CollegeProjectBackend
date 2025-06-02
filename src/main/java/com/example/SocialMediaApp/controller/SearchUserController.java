@@ -28,9 +28,9 @@ public class SearchUserController {
         return searchUserService.searchUsersByUsername(username);
     }
 
-    @GetMapping("/searchUser")
-    public List<User> userSearch(@RequestParam("query") String query){
-        List<User> users = searchUserService.searchUser(query);
-        return users;
-    }
+//    @GetMapping("/searchUser")
+//    public List<User> userSearch(@RequestParam("query") String query){
+//        List<User> users = searchUserService.searchUser(query);
+//        return users;
+//    }
 }

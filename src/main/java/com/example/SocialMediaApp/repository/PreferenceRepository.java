@@ -20,6 +20,8 @@ public interface PreferenceRepository extends CrudRepository<UserPreference, Lon
     List<UserPreference> findByUser(User user);
 
 
+    List<UserPreference> findByUserId(Long userId);
+
 //    @Query(value = "SELECT up.id AS userPrefId, up.user_id AS userId, pt.preference_type_id AS preferenceTypeId, pt.name AS preferenceName " +
 //            "FROM user_preference up " +
 //            "JOIN preference_type pt ON up.preference_type_id = pt.preference_type_id " +

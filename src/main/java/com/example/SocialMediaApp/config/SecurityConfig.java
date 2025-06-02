@@ -61,7 +61,7 @@ public class SecurityConfig {
                                 "/api/auth/logout-all",
                                 "/api/profile/update-profile",
                                 "/api/profile/get-profile",
-                                "/api/images/upload",
+                                "/api/images/**",
                                 "/api/likes/**",
                                 "/api/follow/**",
                                 "/api/user/**",

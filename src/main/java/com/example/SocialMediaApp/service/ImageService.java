@@ -56,11 +56,34 @@ public class ImageService {
         return image.getFilePath();
     }
 
-    // Personalized feed: followed users + matching preferences
+//    // Personalized feed: followed users + matching preferences
+//    public List<Image> getFeedForUser(User user) {
+//        List<Follow> followingList = followRepository.findByFollower(user);
+//        List<User> followingUsers = followingList.stream()
+//                .map(Follow::getFollowing)
+//                .collect(Collectors.toList());
+//
+//        if (followingUsers.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        List<UserPreference> preferences = userPreferenceRepository.findByUser(user);
+//        List<String> preferenceTags = preferences.stream()
+//                .map(UserPreference::getPreferenceName)
+//                .collect(Collectors.toList());
+//
+//        if (preferenceTags.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
+//    }
+
     public List<Image> getFeedForUser(User user) {
         List<Follow> followingList = followRepository.findByFollower(user);
         List<User> followingUsers = followingList.stream()
                 .map(Follow::getFollowing)
+                .filter(u -> !u.getId().equals(user.getId())) // 👈 Exclude self
                 .collect(Collectors.toList());
 
         if (followingUsers.isEmpty()) {
@@ -76,8 +99,14 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-        return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
+        List<Image> images = imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
+
+        // Optional: Double-check and exclude images uploaded by the current user just in case
+        return images.stream()
+                .filter(img -> !img.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
     }
+
 
     // 🔄 New: Recommendation based only on user preferences, ordered by likes descending
     public List<Image> getRecommendations(User user) {
@@ -90,6 +119,9 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags);
+        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags)
+                .stream()
+                .filter(image -> !image.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
     }
 }

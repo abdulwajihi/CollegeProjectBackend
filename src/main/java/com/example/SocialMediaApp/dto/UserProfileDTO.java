@@ -18,5 +18,14 @@ public class UserProfileDTO {
     private String bio;
     private String profilePictureUrl;
 
-    private List<UserPreferenceDTO> preferences;
+    private List<UserPreferenceDTO> preferences;// ✅ User preferences
+    private List<ImageResponseDto> images;
+    public List<ImageResponseDto> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageResponseDto> images) {
+        this.images = images;
+    }
+
 }

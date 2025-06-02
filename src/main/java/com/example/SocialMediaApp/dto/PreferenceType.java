@@ -19,6 +19,7 @@ public class PreferenceType {
     @Column(unique = true,name = "name")
     private String name;
 
-
-
+    public String getName() {
+        return name;
+    }
 }
