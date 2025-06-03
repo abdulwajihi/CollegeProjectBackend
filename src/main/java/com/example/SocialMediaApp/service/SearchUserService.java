@@ -29,9 +29,6 @@ public class SearchUserService {
     FollowRepository followRepository;
 
     @Autowired
-    PreferenceRepository preferenceRepository;
-
-    @Autowired
     LikeService likeService;
 
 //    public List<UserDTO> getAllUsers() {
@@ -48,10 +45,21 @@ public List<UserDTO> getAllUsers() {
     String currentEmail = getCurrentUserEmail();
     System.out.println("Authenticated email: " + currentEmail);
 
+        if (currentEmail == null) return List.of();
+
+        // Get the logged-in user
+        User currentUser = searchUserRepository.findByEmail(currentEmail)
+                .orElseThrow(() -> new RuntimeException("Logged-in user not found"));
+
+        Long currentUserId = currentUser.getId();
+
+        // Get list of user IDs whom the current user is following
+        List<Long> followingIds = followRepository.findFollowingIdsByFollowerId(currentUserId);
     List<User> users = searchUserRepository.findAll();
 
     return users.stream()
             .filter(user -> currentEmail == null || !user.getEmail().equalsIgnoreCase(currentEmail))
+            .filter(user -> !followingIds.contains(user.getId()))            // exclude followed users
             .map(this::convertToDTO)
             .collect(Collectors.toList());
 }

@@ -19,6 +19,7 @@ public interface SearchUserRepository extends JpaRepository<User,Long> {
         List<User> searchUser(@Param("query") String query);
 
         Optional<User> findByUsername(String username);
+        Optional<User> findByEmail(String email);
 
 }
 

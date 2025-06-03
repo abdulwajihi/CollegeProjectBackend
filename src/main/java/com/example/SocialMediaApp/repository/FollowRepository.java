@@ -30,4 +30,8 @@ public interface FollowRepository extends JpaRepository<Follow, FollowId> {
     int countByFollowerId(Long followerId);
     int countByFollowingId(Long followingId);
 
+    @Query("SELECT f.following.id FROM Follow f WHERE f.follower.id = :followerId")
+    List<Long> findFollowingIdsByFollowerId(@Param("followerId") Long followerId);
+
+
 }

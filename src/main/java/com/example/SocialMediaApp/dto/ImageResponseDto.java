@@ -17,6 +17,7 @@ public class ImageResponseDto {
     private long likeCount;
     private LocalDateTime uploadedAt;
     private List<String> likedByUsernames;
+    private String profilePictureUrl;
 
 
 
@@ -26,7 +27,7 @@ public class ImageResponseDto {
 
 
     // Full constructor with individual fields
-    public ImageResponseDto(Long userId,Long id, String filename, String tag, String imageUrl, String username, int likes,int likeCount,LocalDateTime uploadedAt) {
+    public ImageResponseDto(Long userId,Long id, String filename, String tag, String imageUrl, String username, int likes,int likeCount,LocalDateTime uploadedAt,String profilePictureUrl) {
         this.userId=userId;
         this.id = id;
         this.filename = filename;
@@ -36,6 +37,7 @@ public class ImageResponseDto {
         this.likes = likes;
         this.likeCount=likeCount;
         this.uploadedAt=uploadedAt;
+        this.profilePictureUrl=profilePictureUrl;
     }
 
     // ✅ Add this constructor for convenience
@@ -52,6 +54,7 @@ public class ImageResponseDto {
         this.likedByUsernames = image.getLikes().stream()
                 .map(like -> like.getUser().getUsername())
                 .collect(Collectors.toList());
+        this.profilePictureUrl = image.getUser().getProfilePictureUrl();
     }
 
     // Getters and Setters
@@ -105,5 +108,13 @@ public class ImageResponseDto {
 
     public void setLikedByUsernames(List<String> likedByUsernames) {
         this.likedByUsernames = likedByUsernames;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
     }
 }
