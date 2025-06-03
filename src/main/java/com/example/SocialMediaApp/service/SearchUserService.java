@@ -31,6 +31,9 @@ public class SearchUserService {
     @Autowired
     PreferenceRepository preferenceRepository;
 
+    @Autowired
+    LikeService likeService;
+
 //    public List<UserDTO> getAllUsers() {
 //        String currentUsername = getCurrentUsername();
 //        List<User> users = searchUserRepository.findAll();
@@ -151,8 +154,16 @@ public List<UserDTO> searchUsersByUsername(String username) {
                 ))
                 .collect(Collectors.toList());
 
+        List<String> likedByUsernames = imageRepository.findByUserId(user.getId()).stream()
+                .flatMap(img -> img.getLikes().stream())
+                .map(like -> like.getUser().getUsername())
+                .distinct()
+                .collect(Collectors.toList());
+
         Long userIdToReturn = (currentEmail != null && user.getEmail().equalsIgnoreCase(currentEmail))
                 ? null : user.getId();
+
+
 
         return new UserDTO(
                 userIdToReturn,
@@ -164,7 +175,8 @@ public List<UserDTO> searchUsersByUsername(String username) {
                 user.getProfilePictureUrl(),
                 followers,
                 following,
-                uploadedImages
+                uploadedImages,
+                likedByUsernames
 
         );
 

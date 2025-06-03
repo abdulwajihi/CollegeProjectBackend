@@ -3,6 +3,8 @@ package com.example.SocialMediaApp.dto;
 import com.example.SocialMediaApp.dto.Image;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImageResponseDto {
     private Long userId;
@@ -14,6 +16,7 @@ public class ImageResponseDto {
     private int likes;
     private long likeCount;
     private LocalDateTime uploadedAt;
+    private List<String> likedByUsernames;
 
 
 
@@ -46,6 +49,9 @@ public class ImageResponseDto {
         this.likes = image.getLikes().size();
         this.likeCount=image.getLikeCount();
         this.uploadedAt=image.getUploadedAt();
+        this.likedByUsernames = image.getLikes().stream()
+                .map(like -> like.getUser().getUsername())
+                .collect(Collectors.toList());
     }
 
     // Getters and Setters
@@ -91,5 +97,13 @@ public class ImageResponseDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public List<String> getLikedByUsernames() {
+        return likedByUsernames;
+    }
+
+    public void setLikedByUsernames(List<String> likedByUsernames) {
+        this.likedByUsernames = likedByUsernames;
     }
 }

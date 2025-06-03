@@ -48,20 +48,27 @@ public class UpdateService {
     public List<ImageResponseDto> getUserUploadedImages(String username) {
         List<Image> images = imageRepository.findAllImagesByUsernameWithLikes(username);
 
-        return images.stream().map(image -> {
-            ImageResponseDto dto = new ImageResponseDto();
-            dto.setId(image.getId());
-            dto.setImageUrl(image.getFilePath());
-            dto.setTag(image.getTag());
-            dto.setUploadedAt(image.getUploadedAt());
-            dto.setLikes((int) image.getLikeCount());
-            dto.setLikeCount(image.getLikes().size());
-            dto.setUsername(image.getUser().getUsername());
-            dto.setFilename(image.getFilename());
-            dto.setUserId(image.getUser().getId());
+//        return images.stream().map(image -> {
+//            ImageResponseDto dto = new ImageResponseDto();
+//            dto.setId(image.getId());
+//            dto.setImageUrl(image.getFilePath());
+//            dto.setTag(image.getTag());
+//            dto.setUploadedAt(image.getUploadedAt());
+//            dto.setLikes((int) image.getLikeCount());
+//            dto.setLikeCount(image.getLikes().size());
+//            dto.setUsername(image.getUser().getUsername());
+//            dto.setFilename(image.getFilename());
+//            dto.setUserId(image.getUser().getId());
+//            dto.getLikedByUsernames();
+//
+//            return dto;
+//        }).collect(Collectors.toList());
 
-            return dto;
-        }).collect(Collectors.toList());
+        //Updated code is
+        return images.stream()
+                .map(ImageResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 
 
