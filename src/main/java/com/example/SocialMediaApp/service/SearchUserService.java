@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -39,6 +40,7 @@ public class SearchUserService {
 //                .map(this::convertToDTO)
 //                .collect(Collectors.toList());
 //    }
+    @Transactional
 public List<UserDTO> getAllUsers() {
     String currentEmail = getCurrentUserEmail();
     System.out.println("Authenticated email: " + currentEmail);
@@ -95,6 +97,7 @@ public List<UserDTO> getAllUsers() {
 //                .map(this::convertToDTO)
 //                .collect(Collectors.toList());
 //    }
+  @Transactional
 public List<UserDTO> searchUsersByUsername(String username) {
     String currentUserEmail = getCurrentUserEmail();
     System.out.println("Current logged-in email: " + currentUserEmail);
@@ -128,7 +131,7 @@ public List<UserDTO> searchUsersByUsername(String username) {
 //    }
 
     private UserDTO convertToDTO(User user) {
-        String currentUsername = getCurrentUserEmail();
+        String currentEmail = getCurrentUserEmail();
         int followers = followRepository.countByFollowingId(user.getId());
         int following = followRepository.countByFollowerId(user.getId());
 
@@ -148,7 +151,7 @@ public List<UserDTO> searchUsersByUsername(String username) {
                 ))
                 .collect(Collectors.toList());
 
-        Long userIdToReturn = (currentUsername != null && user.getUsername().equalsIgnoreCase(currentUsername))
+        Long userIdToReturn = (currentEmail != null && user.getEmail().equalsIgnoreCase(currentEmail))
                 ? null : user.getId();
 
         return new UserDTO(

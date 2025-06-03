@@ -1,6 +1,7 @@
 package com.example.SocialMediaApp.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class Image {
     private String tag;
     private String filePath;
     @ManyToOne
+    @JsonIgnoreProperties("images")  // Only if User has a list of images
     private User user;
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PostLike> likes = new ArrayList<>();

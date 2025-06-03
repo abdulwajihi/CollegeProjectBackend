@@ -58,6 +58,7 @@ public class UpdateService {
             dto.setLikeCount(image.getLikes().size());
             dto.setUsername(image.getUser().getUsername());
             dto.setFilename(image.getFilename());
+            dto.setUserId(image.getUser().getId());
 
             return dto;
         }).collect(Collectors.toList());
