@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -19,19 +20,37 @@ public class AvatarService {
     @Autowired
     private Cloudinary cloudinary;
 
+    private static final String[] COLORS = {
+            "#FFB6C1", "#FF7F50", "#87CEFA", "#98FB98", "#DDA0DD",
+            "#FFD700", "#40E0D0", "#FA8072", "#ADD8E6", "#90EE90"
+    };
+
+    private String getRandomColor() {
+        Random random = new Random();
+        return COLORS[random.nextInt(COLORS.length)];
+    }
+
+    private String getInitials(String firstName, String lastName) {
+        String first = (firstName != null && !firstName.isEmpty()) ? firstName.substring(0, 1).toUpperCase() : "";
+        String last = (lastName != null && !lastName.isEmpty()) ? lastName.substring(0, 1).toUpperCase() : "";
+        return first + last;
+    }
+
     @Async
     public CompletableFuture<String> generateInitialsAvatar(String firstName, String lastName, String username) {
-        String initials = (firstName.charAt(0) + "" + lastName.charAt(0)).toUpperCase();
+        String initials = getInitials(firstName, lastName);
+        String bgColor = getRandomColor(); // 🎨 Soft background
 
         String svg = "<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'>" +
-                "<rect width='100%' height='100%' fill='#4A90E2'/>" +
-                "<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' " +
+                "<rect width='100%' height='100%' fill='" + bgColor + "'/>" +
+                "<text x='50%' y='50%' dy='.35em' text-anchor='middle' " +
                 "font-size='100' fill='white' font-family='Arial'>" +
                 initials +
                 "</text></svg>";
 
         try {
             File tempFile = File.createTempFile(username + "_avatar", ".png");
+
             try (OutputStream os = new FileOutputStream(tempFile)) {
                 TranscoderInput input = new TranscoderInput(new StringReader(svg));
                 TranscoderOutput output = new TranscoderOutput(os);

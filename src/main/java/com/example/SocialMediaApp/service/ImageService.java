@@ -9,7 +9,10 @@ import com.example.SocialMediaApp.dto.UserPreference;
 import com.example.SocialMediaApp.repository.FollowRepository;
 import com.example.SocialMediaApp.repository.ImageRepository;
 import com.example.SocialMediaApp.repository.PreferenceRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -78,7 +81,7 @@ public class ImageService {
 //
 //        return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
 //    }
-
+    @Transactional(readOnly = true)
     public List<Image> getFeedForUser(User user) {
         List<Follow> followingList = followRepository.findByFollower(user);
         List<User> followingUsers = followingList.stream()
@@ -99,16 +102,22 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-        List<Image> images = imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
-
-        // Optional: Double-check and exclude images uploaded by the current user just in case
-        return images.stream()
-                .filter(img -> !img.getUser().getId().equals(user.getId()))
-                .collect(Collectors.toList());
+//        List<Image> images = imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
+//
+//        // Optional: Double-check and exclude images uploaded by the current user just in case
+//        return images.stream()
+//                .filter(img -> !img.getUser().getId().equals(user.getId()))
+//                .collect(Collectors.toList());
+    Pageable pageable = PageRequest.of(0, 20); // Limit feed to 20 images
+    return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags, pageable)
+            .stream()
+            .filter(img -> !img.getUser().getId().equals(user.getId()))
+            .collect(Collectors.toList());
     }
 
 
     // 🔄 New: Recommendation based only on user preferences, ordered by likes descending
+    @Transactional(readOnly = true)
     public List<Image> getRecommendations(User user) {
         List<UserPreference> preferences = userPreferenceRepository.findByUser(user);
         List<String> preferenceTags = preferences.stream()
@@ -119,7 +128,12 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags)
+//        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags)
+//                .stream()
+//                .filter(image -> !image.getUser().getId().equals(user.getId()))
+//                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(0, 20); // Limit recommendations to 20 images
+        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags, pageable)
                 .stream()
                 .filter(image -> !image.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
