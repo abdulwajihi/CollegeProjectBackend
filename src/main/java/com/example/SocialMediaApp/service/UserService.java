@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,8 +74,8 @@ public class UserService {
 
         // ✅ Generate initials-based avatar and set path
         try {
-            String avatarPath = avatarService.generateInitialsAvatar(firstName, lastName, username);
-            user.setProfilePictureUrl(avatarPath); // User entity must have this field
+            CompletableFuture<String> avatarFuture = avatarService.generateInitialsAvatar(firstName, lastName, username);
+            user.setProfilePictureUrl("/default-avatar.png"); // temporary fallback or null
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate avatar: " + e.getMessage());
         }

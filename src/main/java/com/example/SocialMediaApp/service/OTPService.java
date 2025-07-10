@@ -54,6 +54,7 @@ public class OTPService {
        otp.setExpirationTime(expirationTime);
        return otpRepository.save(otp);
   }
+
     public boolean verifyOtp(User user, String purpose, String otpCode) {//verify otp
         List<Otp> otps = otpRepository.findByUserAndPurpose(user, purpose);
         for (Otp otp : otps) {

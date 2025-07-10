@@ -6,10 +6,12 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AvatarService {
@@ -17,7 +19,8 @@ public class AvatarService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public String generateInitialsAvatar(String firstName, String lastName, String username) {
+    @Async
+    public CompletableFuture<String> generateInitialsAvatar(String firstName, String lastName, String username) {
         String initials = (firstName.charAt(0) + "" + lastName.charAt(0)).toUpperCase();
 
         String svg = "<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'>" +
@@ -28,7 +31,6 @@ public class AvatarService {
                 "</text></svg>";
 
         try {
-            // 1. Generate PNG image from SVG to temp file
             File tempFile = File.createTempFile(username + "_avatar", ".png");
             try (OutputStream os = new FileOutputStream(tempFile)) {
                 TranscoderInput input = new TranscoderInput(new StringReader(svg));
@@ -37,17 +39,15 @@ public class AvatarService {
                 transcoder.transcode(input, output);
             }
 
-            // 2. Upload to Cloudinary
             Map uploadResult = cloudinary.uploader().upload(tempFile, ObjectUtils.asMap(
-                    "public_id", "avatars/" + username, // folder + name in Cloudinary
+                    "public_id", "avatars/" + username,
                     "overwrite", true
             ));
 
-            // 3. Clean up temp file
             tempFile.delete();
 
-            // 4. Return secure Cloudinary URL
-            return (String) uploadResult.get("secure_url");
+            String url = (String) uploadResult.get("secure_url");
+            return CompletableFuture.completedFuture(url);
 
         } catch (Exception e) {
             e.printStackTrace();
