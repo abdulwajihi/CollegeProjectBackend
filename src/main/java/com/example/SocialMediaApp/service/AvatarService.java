@@ -1,19 +1,25 @@
 package com.example.SocialMediaApp.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Map;
 
 @Service
 public class AvatarService {
 
-    public String generateInitialsAvatar(String firstName, String lastName, String username) throws Exception {
+    @Autowired
+    private Cloudinary cloudinary;
+
+    public String generateInitialsAvatar(String firstName, String lastName, String username) {
         String initials = (firstName.charAt(0) + "" + lastName.charAt(0)).toUpperCase();
 
-        // SVG template with initials
         String svg = "<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'>" +
                 "<rect width='100%' height='100%' fill='#4A90E2'/>" +
                 "<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' " +
@@ -21,23 +27,31 @@ public class AvatarService {
                 initials +
                 "</text></svg>";
 
-        // Output path to static resources
-        String staticFolderPath = "src/main/resources/static/avatars/";
-        new File(staticFolderPath).mkdirs(); // create folder if not exist
-        String outputFilename = username + "_avatar.png";
-        String outputPath = staticFolderPath + outputFilename;
+        try {
+            // 1. Generate PNG image from SVG to temp file
+            File tempFile = File.createTempFile(username + "_avatar", ".png");
+            try (OutputStream os = new FileOutputStream(tempFile)) {
+                TranscoderInput input = new TranscoderInput(new StringReader(svg));
+                TranscoderOutput output = new TranscoderOutput(os);
+                PNGTranscoder transcoder = new PNGTranscoder();
+                transcoder.transcode(input, output);
+            }
 
-        try (OutputStream os = new FileOutputStream(outputPath)) {
-            TranscoderInput input = new TranscoderInput(new StringReader(svg));
-            TranscoderOutput output = new TranscoderOutput(os);
-            PNGTranscoder transcoder = new PNGTranscoder();
-            transcoder.transcode(input, output);
+            // 2. Upload to Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(tempFile, ObjectUtils.asMap(
+                    "public_id", "avatars/" + username, // folder + name in Cloudinary
+                    "overwrite", true
+            ));
+
+            // 3. Clean up temp file
+            tempFile.delete();
+
+            // 4. Return secure Cloudinary URL
+            return (String) uploadResult.get("secure_url");
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to generate avatar image");
+            throw new RuntimeException("Avatar generation/upload failed: " + e.getMessage());
         }
-
-        // Final image URL that frontend can access
-        return "/avatars/" + outputFilename;
     }
 }
