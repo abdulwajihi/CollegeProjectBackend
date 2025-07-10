@@ -43,6 +43,9 @@ public class UserService {
     @Autowired
     private BlacklistedTokenRepository blacklistedTokenRepository;
 
+    @Autowired
+    private AvatarService avatarService;
+
 
 
 
@@ -67,6 +70,14 @@ public class UserService {
         user.setLastName(lastName);
         user.setVerified(false);
         user.setTokenVersion(0);
+
+        // ✅ Generate initials-based avatar and set path
+        try {
+            String avatarPath = avatarService.generateInitialsAvatar(firstName, lastName, username);
+            user.setProfilePictureUrl(avatarPath); // User entity must have this field
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate avatar: " + e.getMessage());
+        }
 //        user = userRepository.save(user);
         List<String> validPreferenceNames = new ArrayList<>();
 

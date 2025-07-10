@@ -53,7 +53,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/webjars/**",
                                 "/api/preferences/**",
-                                "/public/**"
+                                "/public/**",
+                                "/avatars/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/auth/update-password",
