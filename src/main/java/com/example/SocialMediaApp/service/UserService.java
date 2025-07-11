@@ -74,11 +74,13 @@ public class UserService {
 
         // ✅ Generate initials-based avatar and set path
         try {
-            CompletableFuture<String> avatarFuture = avatarService.generateInitialsAvatar(firstName, lastName, username);
-            user.setProfilePictureUrl("/default-avatar.png"); // temporary fallback or null
+            String avatarUrl = avatarService.generateInitialsAvatar(firstName, lastName, username).get(); // Wait for result
+            user.setProfilePictureUrl(avatarUrl); // ✅ Save the real avatar
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generate avatar: " + e.getMessage());
+            e.printStackTrace(); // Optional: log more details
+            user.setProfilePictureUrl("/default-avatar.png"); // fallback image
         }
+
 //        user = userRepository.save(user);
         List<String> validPreferenceNames = new ArrayList<>();
 
