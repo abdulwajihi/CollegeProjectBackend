@@ -36,7 +36,7 @@ public class AvatarService {
         return first + last;
     }
 
-    @Async
+//    @Async
     public CompletableFuture<String> generateInitialsAvatar(String firstName, String lastName, String username) {
         String initials = getInitials(firstName, lastName);
         String bgColor = getRandomColor(); // 🎨 Soft background
