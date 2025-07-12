@@ -83,16 +83,15 @@ public class UserService {
 //            e.printStackTrace(); // Optional: log more details
 //            user.setProfilePictureUrl("/default-avatar.png"); // fallback image
 //        }
-        // Save user with default avatar
-        user.setProfilePictureUrl("/default-avatar.png");
-        userRepository.save(user);
-
-// Trigger async avatar generation
         avatarService.generateInitialsAvatar(firstName, lastName, username)
                 .thenAccept(avatarUrl -> {
-                    user.setProfilePictureUrl(avatarUrl);
-                    userRepository.save(user); // update after avatar is ready
+                    User freshUser = userRepository.findById(user.getId()).orElse(null);
+                    if (freshUser != null) {
+                        freshUser.setProfilePictureUrl(avatarUrl);
+                        userRepository.save(freshUser); // ✅ now save works
+                    }
                 });
+
 
 
 //        user = userRepository.save(user);
