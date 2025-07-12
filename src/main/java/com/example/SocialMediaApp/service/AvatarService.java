@@ -6,6 +6,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -35,6 +36,7 @@ public class AvatarService {
         return first + last;
     }
 
+    @Async
     public CompletableFuture<String> generateInitialsAvatar(String firstName, String lastName, String username) {
         String initials = getInitials(firstName, lastName);
         String bgColor = getRandomColor();
@@ -63,10 +65,12 @@ public class AvatarService {
 
             tempFile.delete();
 
-            return CompletableFuture.completedFuture((String) uploadResult.get("secure_url"));
+            String url = (String) uploadResult.get("secure_url");
+            return CompletableFuture.completedFuture(url);
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to generate/upload avatar: " + e.getMessage());
+            throw new RuntimeException("Avatar generation/upload failed: " + e.getMessage());
         }
     }
 }
