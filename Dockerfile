@@ -1,11 +1,10 @@
 # ---------- Stage 1: Build the application ----------
 FROM maven:3.9.6-eclipse-temurin-22 AS build
 
-# Step 2: Install necessary libraries (for Batik SVG & fonts)
-RUN apt-get update && apt-get install -y \
-    libfreetype6 \
-    fonts-dejavu-core \
-    && rm -rf /var/lib/apt/lists/*
+# Install dependencies for Batik (required at build for SVG/font rendering)
+RUN apt-get update && \
+    apt-get install -y libfreetype6 fonts-dejavu-core && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -18,6 +17,11 @@ RUN mvn clean package -DskipTests
 
 # ---------- Stage 2: Create the runtime image ----------
 FROM openjdk:22-jdk-slim
+
+# ✅ Install Batik runtime dependencies again
+RUN apt-get update && \
+    apt-get install -y libfreetype6 fonts-dejavu-core && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
