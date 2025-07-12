@@ -74,14 +74,8 @@ public class UserService {
 
         String initials = ((firstName != null && !firstName.isEmpty() ? firstName.substring(0, 1) : "") +
                 (lastName != null && !lastName.isEmpty() ? lastName.substring(0, 1) : "")).toUpperCase();
-        try {
-            String avatarUrl = avatarService.generateAndUploadAvatar(initials, username);
-            user.setProfilePictureUrl(avatarUrl);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to generate avatar: " + e.getMessage());
-        }
-
+        String avatarUrl = avatarService.generateAndUploadAvatar(initials, username);
+        user.setProfilePictureUrl(avatarUrl);
 
 
 //        user = userRepository.save(user);
