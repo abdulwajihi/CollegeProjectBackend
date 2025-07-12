@@ -6,9 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.List;
 public class SocialMediaAppApplication {
 
 	public static void main(String[] args) {
-		System.setProperty("java.awt.headless", "true");
 		SpringApplication.run(SocialMediaAppApplication.class, args);
 	}
 	@Bean
