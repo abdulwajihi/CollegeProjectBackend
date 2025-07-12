@@ -26,7 +26,8 @@ public class AvatarGenerator {
 
         // Draw initials in white, centered
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Arial", Font.BOLD, 100));
+        g2.setFont(new Font("SansSerif", Font.BOLD, 100));
+
         FontMetrics fm = g2.getFontMetrics();
         int x = (size - fm.stringWidth(initials)) / 2;
         int y = ((size - fm.getHeight()) / 2) + fm.getAscent();
