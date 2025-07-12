@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.List;
 @EnableScheduling
 @SpringBootApplication
-@EnableAsync
 public class SocialMediaAppApplication {
 
 	public static void main(String[] args) {

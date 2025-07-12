@@ -71,35 +71,17 @@ public class UserService {
         user.setLastName(lastName);
         user.setVerified(false);
         user.setTokenVersion(0);
-        user.setProfilePictureUrl("/default-avatar.png"); //  fallback
-
-        // ✅ Generate initials-based avatar and set path
-//        try {
-//            CompletableFuture<String> avatarFuture = avatarService.generateInitialsAvatar(firstName, lastName, username);
-//            String avatarUrl = avatarFuture.get(); // If using async, use .get() only when you must wait
-//            user.setProfilePictureUrl(avatarUrl);
-//            ;
-//            // ✅ Save the real avatar
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Optional: log more details
-//            user.setProfilePictureUrl("/default-avatar.png"); // fallback image
-//        }
-        avatarService.generateInitialsAvatar(firstName, lastName, username)
-                .thenAccept(avatarUrl -> {
-                    try {
-                        User freshUser = userRepository.findById(user.getId()).orElse(null);
-                        if (freshUser != null) {
-                            freshUser.setProfilePictureUrl(avatarUrl);
-                            userRepository.save(freshUser);
-                            System.out.println("✅ Avatar updated after async: " + avatarUrl);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
 
 
 
+        String avatarUrl;
+        try {
+            avatarUrl = avatarService.generateInitialsAvatar(firstName, lastName, username);
+            user.setProfilePictureUrl(avatarUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            user.setProfilePictureUrl("/default-avatar.png");
+        }
 
 //        user = userRepository.save(user);
         List<String> validPreferenceNames = new ArrayList<>();

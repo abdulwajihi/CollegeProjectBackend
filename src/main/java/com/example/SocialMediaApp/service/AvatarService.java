@@ -6,13 +6,11 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AvatarService {
@@ -36,8 +34,7 @@ public class AvatarService {
         return first + last;
     }
 
-    @Async
-    public CompletableFuture<String> generateInitialsAvatar(String firstName, String lastName, String username) {
+    public String generateInitialsAvatar(String firstName, String lastName, String username) {
         String initials = getInitials(firstName, lastName);
         String bgColor = getRandomColor();
 
@@ -65,8 +62,7 @@ public class AvatarService {
 
             tempFile.delete();
 
-            String url = (String) uploadResult.get("secure_url");
-            return CompletableFuture.completedFuture(url);
+            return (String) uploadResult.get("secure_url");
 
         } catch (Exception e) {
             e.printStackTrace();
