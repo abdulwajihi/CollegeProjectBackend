@@ -1,6 +1,12 @@
 # ---------- Stage 1: Build the application ----------
 FROM maven:3.9.6-eclipse-temurin-22 AS build
 
+# Step 2: Install necessary libraries (for Batik SVG & fonts)
+RUN apt-get update && apt-get install -y \
+    libfreetype6 \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /app
 
