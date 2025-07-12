@@ -17,6 +17,7 @@ import java.util.List;
 public class SocialMediaAppApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("java.awt.headless", "true");
 		SpringApplication.run(SocialMediaAppApplication.class, args);
 	}
 	@Bean

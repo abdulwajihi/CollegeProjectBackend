@@ -62,12 +62,33 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-bridge</artifactId>
+			<version>1.16</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-transcoder</artifactId>
 			<version>1.16</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-dom</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-css</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-parser</artifactId>
+			<version>1.16</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-codec</artifactId>
