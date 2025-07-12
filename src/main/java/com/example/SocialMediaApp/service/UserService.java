@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +45,7 @@ public class UserService {
     private BlacklistedTokenRepository blacklistedTokenRepository;
 
     @Autowired
-    private AvatarService avatarService;
+    AvatarService avatarService;
 
 
 
@@ -72,16 +72,17 @@ public class UserService {
         user.setVerified(false);
         user.setTokenVersion(0);
 
-
-
-        String avatarUrl;
+        String initials = ((firstName != null && !firstName.isEmpty() ? firstName.substring(0, 1) : "") +
+                (lastName != null && !lastName.isEmpty() ? lastName.substring(0, 1) : "")).toUpperCase();
         try {
-            avatarUrl = avatarService.generateInitialsAvatar(firstName, lastName, username);
+            String avatarUrl = avatarService.generateAndUploadAvatar(initials, username);
             user.setProfilePictureUrl(avatarUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            user.setProfilePictureUrl("/default-avatar.png");
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to generate avatar: " + e.getMessage());
         }
+
+
 
 //        user = userRepository.save(user);
         List<String> validPreferenceNames = new ArrayList<>();
