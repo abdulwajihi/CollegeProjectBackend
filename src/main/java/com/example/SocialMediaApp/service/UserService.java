@@ -71,6 +71,7 @@ public class UserService {
         user.setLastName(lastName);
         user.setVerified(false);
         user.setTokenVersion(0);
+        user.setProfilePictureUrl("/default-avatar.png"); //  fallback
 
         // ✅ Generate initials-based avatar and set path
 //        try {
@@ -85,12 +86,18 @@ public class UserService {
 //        }
         avatarService.generateInitialsAvatar(firstName, lastName, username)
                 .thenAccept(avatarUrl -> {
-                    User freshUser = userRepository.findById(user.getId()).orElse(null);
-                    if (freshUser != null) {
-                        freshUser.setProfilePictureUrl(avatarUrl);
-                        userRepository.save(freshUser); // ✅ now save works
+                    try {
+                        User freshUser = userRepository.findById(user.getId()).orElse(null);
+                        if (freshUser != null) {
+                            freshUser.setProfilePictureUrl(avatarUrl);
+                            userRepository.save(freshUser);
+                            System.out.println("✅ Avatar updated after async: " + avatarUrl);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
+
 
 
 
