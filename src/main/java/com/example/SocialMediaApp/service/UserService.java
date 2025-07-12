@@ -5,6 +5,7 @@ import com.example.SocialMediaApp.repository.BlacklistedTokenRepository;
 import com.example.SocialMediaApp.repository.PreferenceRepository;
 import com.example.SocialMediaApp.repository.PreferenceTypeRepository;
 import com.example.SocialMediaApp.repository.UserRepository;
+import com.example.SocialMediaApp.util.BytesToMultipartFile;
 import com.example.SocialMediaApp.util.JwtUtil;
 import com.example.SocialMediaApp.util.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +48,7 @@ public class UserService {
     private BlacklistedTokenRepository blacklistedTokenRepository;
 
     @Autowired
-    AvatarService avatarService;
+    CloudinaryService cloudinaryService;
 
 
 
@@ -72,10 +75,26 @@ public class UserService {
         user.setVerified(false);
         user.setTokenVersion(0);
 
-        String initials = ((firstName != null && !firstName.isEmpty() ? firstName.substring(0, 1) : "") +
-                (lastName != null && !lastName.isEmpty() ? lastName.substring(0, 1) : "")).toUpperCase();
-        String avatarUrl = avatarService.generateAndUploadAvatar(initials, username);
-        user.setProfilePictureUrl(avatarUrl);
+        try {
+            String initials = ("" + firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+            String avatarUrl = "https://ui-avatars.com/api/?name=" + initials + "&background=random&color=fff&size=256";
+
+            // Download image bytes from avatar URL
+            byte[] imageBytes = new URL(avatarUrl).openStream().readAllBytes();
+
+            // Wrap bytes into MultipartFile for Cloudinary
+            MultipartFile multipartFile = new BytesToMultipartFile(imageBytes, username + "_avatar.png");
+
+            // Upload to Cloudinary
+            String cloudinaryUrl = cloudinaryService.uploadFile(multipartFile);
+
+            // Set profile picture URL
+            user.setProfilePictureUrl(cloudinaryUrl);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate or upload avatar: " + e.getMessage());
+        }
+
 
 
 //        user = userRepository.save(user);
