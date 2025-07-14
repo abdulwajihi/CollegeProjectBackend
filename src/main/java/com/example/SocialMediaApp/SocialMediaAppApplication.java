@@ -2,6 +2,7 @@ package com.example.SocialMediaApp;
 
 import com.example.SocialMediaApp.dto.PreferenceType;
 import com.example.SocialMediaApp.repository.PreferenceTypeRepository;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,16 @@ import java.util.List;
 public class SocialMediaAppApplication {
 
 	public static void main(String[] args) {
+		// Load .env file only in local development
+		if (System.getenv("RENDER") == null) {
+			Dotenv dotenv = Dotenv.configure()
+					.ignoreIfMissing()
+					.load();
+
+			dotenv.entries().forEach(entry -> {
+				System.setProperty(entry.getKey(), entry.getValue());
+			});
+		}
 		SpringApplication.run(SocialMediaAppApplication.class, args);
 	}
 	@Bean

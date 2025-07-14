@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/api/preferences/**",
                                 "/public/**",
-                                "/avatars/**"
+                                "/avatars/**",
+                                "/actuator/health"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/auth/update-password",
