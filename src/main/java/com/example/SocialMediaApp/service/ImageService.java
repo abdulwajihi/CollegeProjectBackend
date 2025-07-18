@@ -102,17 +102,17 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-//        List<Image> images = imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
-//
-//        // Optional: Double-check and exclude images uploaded by the current user just in case
-//        return images.stream()
-//                .filter(img -> !img.getUser().getId().equals(user.getId()))
-//                .collect(Collectors.toList());
-    Pageable pageable = PageRequest.of(0, 20); // Limit feed to 20 images
-    return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags, pageable)
-            .stream()
-            .filter(img -> !img.getUser().getId().equals(user.getId()))
-            .collect(Collectors.toList());
+        List<Image> images = imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags);
+
+        // Optional: Double-check and exclude images uploaded by the current user just in case
+        return images.stream()
+                .filter(img -> !img.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
+//    Pageable pageable = PageRequest.of(0, 20); // Limit feed to 20 images
+//    return imageRepository.findByUserInAndTagInOrderByLikesDesc(followingUsers, preferenceTags, pageable)
+//            .stream()
+//            .filter(img -> !img.getUser().getId().equals(user.getId()))
+//            .collect(Collectors.toList());
     }
 
 
@@ -128,14 +128,14 @@ public class ImageService {
             return Collections.emptyList();
         }
 
-//        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags)
-//                .stream()
-//                .filter(image -> !image.getUser().getId().equals(user.getId()))
-//                .collect(Collectors.toList());
-        Pageable pageable = PageRequest.of(0, 20); // Limit recommendations to 20 images
-        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags, pageable)
+        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags)
                 .stream()
                 .filter(image -> !image.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
+//        Pageable pageable = PageRequest.of(0, 20); // Limit recommendations to 20 images
+//        return imageRepository.findByTagInOrderByLikesDesc(preferenceTags, pageable)
+//                .stream()
+//                .filter(image -> !image.getUser().getId().equals(user.getId()))
+//                .collect(Collectors.toList());
     }
 }

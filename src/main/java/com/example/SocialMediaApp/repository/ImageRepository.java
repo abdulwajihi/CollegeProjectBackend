@@ -21,8 +21,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 @Query("SELECT i FROM Image i LEFT JOIN FETCH i.user WHERE i.user IN :users AND i.tag IN :tags ORDER BY SIZE(i.likes) DESC")
 List<Image> findByUserInAndTagInOrderByLikesDesc(
         @Param("users") List<User> users,
-        @Param("tags") List<String> tags,
-        Pageable pageable
+        @Param("tags") List<String> tags
 );
 
 //    // ✅ For recommendations: images matching user preferences only, sorted by likes
@@ -31,7 +30,7 @@ List<Image> findByUserInAndTagInOrderByLikesDesc(
 
     // ✅ For recommendations: images matching user preferences only, sorted by likes
     @Query("SELECT i FROM Image i LEFT JOIN FETCH i.user WHERE i.tag IN :tags ORDER BY SIZE(i.likes) DESC")
-    List<Image> findByTagInOrderByLikesDesc(@Param("tags") List<String> tags, Pageable pageable);
+    List<Image> findByTagInOrderByLikesDesc(@Param("tags") List<String> tags);
 
 
 //    // ✅ Get all images posted by a specific user
