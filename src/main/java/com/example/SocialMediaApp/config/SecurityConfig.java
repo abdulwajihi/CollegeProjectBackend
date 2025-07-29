@@ -100,8 +100,6 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "https://pixcircle.onrender.com",
-                "https://pixcircle.onrender.com/feed",
-                "https://pixcircle.onrender.com/login",
                 "http://localhost:5173"
         ));
 
